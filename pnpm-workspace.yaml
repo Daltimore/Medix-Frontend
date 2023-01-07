@@ -1,0 +1,5 @@
+packages:
+  # applications that will be deployed (e.g website, frontend-app, backend-app)
+  - 'apps/*'
+  # code (utility functions, type definitions, packages, etc) that is meant to be reused between applications
+  - 'libs/*'
