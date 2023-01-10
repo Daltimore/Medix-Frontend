@@ -14,11 +14,12 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import { config } from "../config";
 import { UserDef } from "@medix/types";
-import { AccessTokenPayload, scopes } from "../domains/auth/types";
+import { AccessTokenPayload, Scope, scopes } from "../domains/auth/types";
 
 export class RequestContext {
   public user?: UserDef;
   public scope?: typeof scopes[number];
+  public tenant?: string;
 
   private static _bindings = new WeakMap<Request, RequestContext>();
 
@@ -55,6 +56,12 @@ export const addMiddleware = (app: Express) => {
   app.use(expressStatic(joinPaths(__dirname, "../../public")));
 
   app.use(context);
+
+  // for dev: simulate getting tenant from hostname
+  app.use((req, _, next) => {
+    RequestContext.get(req)!.tenant = "upth-ph";
+    next();
+  });
 };
 
 export const authMiddleware = async (
@@ -89,9 +96,12 @@ export const authMiddleware = async (
   return next();
 };
 
-export const requireScope = (scope: typeof scopes[number]) => {
+export const requireScope = (scopes: Array<Scope> | Scope) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (RequestContext.get(req)!.scope !== scope)
+    if (
+      !RequestContext.get(req)!.scope ||
+      ![scopes].flat(Infinity).includes(RequestContext.get(req)!.scope!)
+    )
       return res.status(403).send({
         message: `You do not have sufficient permissions to access this resource`,
       });

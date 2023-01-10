@@ -3,7 +3,7 @@ import {
   createAccessToken,
   createHospitalMemberOfStaff,
 } from "../domains/auth";
-import { authMiddleware, requireScope } from "../middleware";
+import { RequestContext, authMiddleware, requireScope } from "../middleware";
 import { UserSignInPayloadDef } from "@medix/types";
 import { UserModel } from "../domains/user/models";
 import { Crypt } from "../utils";
@@ -12,7 +12,8 @@ import { connectToDb } from "../database/index";
 
 export const medicRouter = Router();
 const requireSysAdmin = requireScope("hospital-admin");
-const requireStaffMember = requireScope("hospital-medic");
+const requireMedic = requireScope("hospital-medic");
+const requireAuth = requireScope(["hospital-medic", "hospital-admin"]);
 
 medicRouter.post("/users", authMiddleware, requireSysAdmin, (req, res) => {
   return res.send(createHospitalMemberOfStaff(req.body));
@@ -59,6 +60,18 @@ medicRouter.post("/auth", async (req, res) => {
     });
   } catch (err) {
     res.status(406).send({
+      message: new Error(err as string | undefined).message,
+    });
+  }
+});
+
+medicRouter.get("/profile", authMiddleware, requireAuth, async (req, res) => {
+  const ctx = RequestContext.get(req);
+  await connectToDb(ctx?.tenant!);
+  try {
+    return res.send(await UserModel.findById(ctx?.user?._id));
+  } catch (err) {
+    return res.status(406).send({
       message: new Error(err as string | undefined).message,
     });
   }
