@@ -33,9 +33,10 @@ export const createAccessToken = (user: UserDef, scope: Scope) => {
   });
 };
 
-export const createRefreshToken = (userId: string) => {
+export const createRefreshToken = (userId: string, scope: Scope) => {
   const payload: RefreshTokenPayload = {
     userId,
+    scope,
   };
   return jwt.sign({ ...payload }, config.JWT_SECRET!, {
     expiresIn: config.REFRESH_TOKEN_TTL,

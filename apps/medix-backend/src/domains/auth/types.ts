@@ -2,6 +2,7 @@ import { UserDef } from "@medix/types";
 
 export interface RefreshTokenPayload {
   userId: string;
+  scope: Scope;
 }
 
 export const scopes = [
