@@ -4,7 +4,7 @@ import {
   createHospitalMemberOfStaff,
 } from "../domains/auth";
 import { RequestContext, authMiddleware, requireScope } from "../middleware";
-import { UserSignInPayloadDef } from "@medix/types";
+import { UserDef, UserSignInPayloadDef } from "@medix/types";
 import { UserModel } from "../domains/user/models";
 import { Crypt } from "../utils";
 import { createRefreshToken } from "../domains/auth/index";
@@ -71,6 +71,27 @@ medicRouter.get("/profile", authMiddleware, requireAuth, async (req, res) => {
   await connectToDb(ctx?.tenant!);
   try {
     return res.send(await UserModel.findById(ctx?.user?._id));
+  } catch (err) {
+    return res.status(406).send({
+      message: new Error(err as string | undefined).message,
+    });
+  }
+});
+
+medicRouter.put("/profile", authMiddleware, requireAuth, async (req, res) => {
+  const ctx = RequestContext.get(req);
+  await connectToDb(ctx?.tenant!);
+  const { _id, password, createdAt, updatedAt, ...payload } =
+    req.body as UserDef;
+  try {
+    const updatedDoc = await UserModel.findByIdAndUpdate(ctx?.user?._id, {
+      ...payload,
+    });
+    if (!updatedDoc)
+      throw new Error(
+        "Something went wrong and your profile could not be updated"
+      );
+    return res.send({ ...updatedDoc.toJSON(), ...payload, password: "" });
   } catch (err) {
     return res.status(406).send({
       message: new Error(err as string | undefined).message,
