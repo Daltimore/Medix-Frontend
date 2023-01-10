@@ -45,11 +45,12 @@ medicRouter.post("/auth", async (req, res) => {
     if (!Crypt.compare(payload.password, user.password))
       throw new Error("Invalid credentials!");
 
-    const accessToken = createAccessToken(
-      user,
-      user.profileType === "Administrator" ? "hospital-admin" : "hospital-medic"
-    );
-    const refreshToken = createRefreshToken(user._id);
+    const scope =
+      user.profileType === "Administrator"
+        ? "hospital-admin"
+        : "hospital-medic";
+    const accessToken = createAccessToken(user, scope);
+    const refreshToken = createRefreshToken(user._id, scope);
 
     const { password, ...u } = user.toJSON();
 
