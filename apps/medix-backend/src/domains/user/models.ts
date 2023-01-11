@@ -1,14 +1,7 @@
 import { UserDef } from "@medix/types";
-import { Schema, SchemaDefinitionProperty, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import isEmail from "validator/lib/isEmail";
-
-const generateNameSchema = (
-  field: string
-): SchemaDefinitionProperty<string> => ({
-  type: String,
-  required: [true, `\`${field}\` is a required field`],
-  maxlength: [64, `\`${field}\` cannot be more than 64 characters long`],
-});
+import { generateNameSchema } from "../../utils";
 
 export const UserSchema = new Schema<UserDef>(
   {
