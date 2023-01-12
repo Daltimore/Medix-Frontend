@@ -43,3 +43,22 @@ patientRouter.get("/:id", ...auth, async (req, res) => {
     });
   }
 });
+
+patientRouter.put("/:id", ...auth, async (req, res) => {
+  try {
+    await switchToRequestTenantDb(req);
+    const patientId = req.params["id"];
+    const updateRes = await PatientModel.findByIdAndUpdate(patientId, {
+      ...req.body,
+    });
+    if (updateRes === null)
+      return res.status(404).send({
+        message: "No patient found",
+      });
+    return res.send(updateRes.toJSON());
+  } catch (err) {
+    return res.status(500).send({
+      message: new Error(err as string | undefined).message,
+    });
+  }
+});
