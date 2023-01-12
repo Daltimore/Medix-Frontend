@@ -96,7 +96,7 @@ export const authMiddleware = async (
   return next();
 };
 
-export const requireScope = (scopes: Array<Scope> | Scope) => {
+export const requireScope = (...scopes: Array<Scope>) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (
       !RequestContext.get(req)!.scope ||
@@ -108,3 +108,10 @@ export const requireScope = (scopes: Array<Scope> | Scope) => {
     return next();
   };
 };
+
+export const requireSysAdmin = requireScope("hospital-admin");
+export const requireMedic = requireScope("hospital-medic");
+export const requireHospitalAuth = requireScope(
+  "hospital-medic",
+  "hospital-admin"
+);

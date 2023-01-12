@@ -4,7 +4,7 @@ import { addMiddleware } from "./middleware";
 import { config as loadEnvVars } from "dotenv";
 import { adminRoutes } from "./domains/admin";
 import { medicRouter } from "./routes/medic";
-import { noAuthRoutes } from "./routes";
+import { noAuthRoutes, patientRouter } from "./routes";
 
 process.on("unhandledRejection", (err) => {
   console.log("An unhandled exception occurred!", err);
@@ -24,9 +24,10 @@ addMiddleware(app);
 app.use("/admin", adminRoutes.router);
 app.use("/medic", medicRouter);
 app.use("/no-auth", noAuthRoutes);
+app.use("/patients", patientRouter);
 
 app.use("", (_, res) => {
-  res.send("Hello, from Medix");
+  res.status(404).send("You are lost :(");
 });
 
 app.listen(PORT, () => {
