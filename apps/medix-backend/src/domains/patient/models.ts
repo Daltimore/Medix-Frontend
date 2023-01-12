@@ -1,7 +1,15 @@
-import { PatientDef, genders, maritalStatuses } from "@medix/types";
+import {
+  PatientDef,
+  bloodGroups,
+  genders,
+  genotypes,
+  maritalStatuses,
+  NextOfKinDef,
+  PatientVitalsDef,
+  temperatureUnits,
+} from "@medix/types";
 import { Schema, model } from "mongoose";
-import isEmail from "validator/lib/isEmail";
-import { generateNameSchema } from "../../utils";
+import { generateEmailSchema, generateNameSchema } from "../../utils";
 
 const PatientSchema = new Schema<PatientDef>(
   {
@@ -24,10 +32,7 @@ const PatientSchema = new Schema<PatientDef>(
       },
     },
     dateOfBirth: Date,
-    email: {
-      type: String,
-      validate: [isEmail, "a valid email address is required"],
-    },
+    email: generateEmailSchema(),
     firstName: generateNameSchema("firstName"),
     lastName: generateNameSchema("lastName"),
     gender: {
@@ -53,6 +58,66 @@ const PatientSchema = new Schema<PatientDef>(
       type: String,
     },
     title: String,
+    bloodGroup: {
+      type: String,
+      enum: {
+        values: bloodGroups,
+        message: "invalid value for field `bloodGroup`: {VALUE}",
+      },
+    },
+    genotype: {
+      type: String,
+      enum: {
+        values: genotypes,
+        message: "invalid value for field `genotype`: {VALUE}",
+      },
+    },
+    isReferredPatient: {
+      type: Boolean,
+      default: false,
+    },
+    referrerId: String,
+    nextOfKin: new Schema<NextOfKinDef>({
+      email: generateEmailSchema(),
+      name: {
+        type: String,
+        required: [true, "next-of-kin's name is required"],
+        maxlength: 194, // each 'name' is allowed 64 chars: 194 allows for three names and two spaces
+      },
+      phone: {
+        type: String,
+        required: [true, "next-of-kin's phone number is required"],
+      },
+      relationship: {
+        type: String,
+        required: [true, "relationship with next-of-kin is required"],
+        maxlength: 20,
+      },
+    }),
+    vitals: new Schema<PatientVitalsDef>({
+      pulse: {
+        type: Number,
+        max: 220,
+      },
+      respiration: {
+        type: Number,
+        max: 40,
+      },
+      temperature: {
+        type: Number,
+        max: 232,
+      },
+      temperatureUnit: {
+        type: String,
+        enum: {
+          values: temperatureUnits,
+          message: `\`temperatureUnit\` must be one of ${temperatureUnits.join(
+            ", "
+          )}`,
+        },
+        default: "C",
+      },
+    }),
   },
   {
     timestamps: true,
