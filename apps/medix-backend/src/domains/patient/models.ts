@@ -7,9 +7,32 @@ import {
   NextOfKinDef,
   PatientVitalsDef,
   temperatureUnits,
+  ValueWithTimestampDef,
+  MedicationDef,
 } from "@medix/types";
 import { Schema, model } from "mongoose";
 import { generateEmailSchema, generateNameSchema } from "../../utils";
+
+const ValueWithTimestampSchema = new Schema<ValueWithTimestampDef>({
+  timestamp: {
+    type: Date,
+    default: new Date(),
+    required: true,
+  },
+  value: {
+    type: String,
+    required: true,
+  },
+});
+
+const PatientMedicationSchema = new Schema<MedicationDef>({
+  frequency: String,
+  quantity: String,
+  name: {
+    type: String,
+    required: true,
+  },
+});
 
 const PatientSchema = new Schema<PatientDef>(
   {
@@ -118,6 +141,17 @@ const PatientSchema = new Schema<PatientDef>(
         default: "C",
       },
     }),
+    allergies: {
+      type: [String],
+      default: [],
+    },
+    cardNumber: String,
+    files: {
+      type: [String],
+      default: [],
+    },
+    immunizations: ValueWithTimestampSchema,
+    medications: PatientMedicationSchema,
   },
   {
     timestamps: true,

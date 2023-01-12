@@ -14,7 +14,7 @@ export interface PatientVitalsDef {
 export const genotypes = ["AA", "AO", "BB", "BO", "AB", "OO"] as const;
 export type genotype = typeof genotypes[number];
 
-export const bloodGroups = ["A", "B", "AB", ""] as const;
+export const bloodGroups = ["A", "B", "AB", "O"] as const;
 export type bloodGroup = typeof bloodGroups[number];
 
 export interface NextOfKinDef {
@@ -22,6 +22,17 @@ export interface NextOfKinDef {
   relationship: string;
   phone: string;
   email: string;
+}
+
+export interface ValueWithTimestampDef {
+  value: string;
+  timestamp: Date;
+}
+
+export interface MedicationDef {
+  name: string;
+  quantity?: string;
+  frequency?: string;
 }
 
 export interface PatientDef extends BaseDocumentDef {
@@ -42,4 +53,9 @@ export interface PatientDef extends BaseDocumentDef {
   isReferredPatient: boolean;
   referrerId?: string;
   nextOfKin?: NextOfKinDef;
+  cardNumber?: string;
+  allergies: Array<string>;
+  immunizations: Array<ValueWithTimestampDef>;
+  medications: Array<MedicationDef>;
+  files: Array<string>;
 }
