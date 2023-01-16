@@ -5,10 +5,9 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "node dist/app.js",
-    "dev": "concurrently 'tsc --watch' 'nodemon -q dist/app.js'",
-    "postinstall": "npm run build"
+    "dev": "concurrently 'tsc --watch' 'nodemon -q dist/app.js'"
   },
   "private": "true",
   "dependencies": {
