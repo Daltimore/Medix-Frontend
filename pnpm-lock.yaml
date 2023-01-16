@@ -32,7 +32,6 @@ importers:
       typescript: ^4.9.4
       validator: ^13.7.0
     dependencies:
-      '@medix/types': link:../../libs/types
       bcrypt: 5.1.0
       cookie-parser: 1.4.6
       cors: 2.8.5
@@ -45,6 +44,7 @@ importers:
       morgan: 1.10.0
       validator: 13.7.0
     devDependencies:
+      '@medix/types': link:../../libs/types
       '@types/bcrypt': 5.0.0
       '@types/cookie-parser': 1.4.3
       '@types/cors': 2.8.13
