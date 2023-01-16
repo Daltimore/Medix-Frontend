@@ -9,8 +9,7 @@ ARG root="/usr/apps/backend"
 RUN mkdir -p ${root}
 WORKDIR ${root}
 
-COPY apps/medix-backend/package.json ${root}
-COPY pnpm-lock.yaml ${root}
+COPY apps/medix-backend/package.json pnpm-lock.yaml ${root}
 RUN pnpm install
 ##
 

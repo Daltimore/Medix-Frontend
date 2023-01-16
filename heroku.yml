@@ -1,3 +1,3 @@
 build:
   docker:
-    web: apps/medix-backend/Dockerfile
+    web: Dockerfile
