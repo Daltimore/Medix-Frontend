@@ -1,16 +1,11 @@
 FROM node:18-alpine AS base
-##
-
-FROM base AS dependencies
 
 ARG root="/usr/apps/backend"
 RUN mkdir -p ${root}
 WORKDIR ${root}
 
-COPY package.json ${root}
+COPY apps/medix-backend/package.json .
 RUN npm install --production
-COPY . ${root}/
-##
+COPY apps/medix-backend/dist/. ./
 
 CMD [ "node", "app.js" ]
-##
