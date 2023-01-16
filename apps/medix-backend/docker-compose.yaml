@@ -1,0 +1,10 @@
+version: '3'
+services:
+  backend:
+    image: octoblu/pnpm
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deploy
+    ports:
+      - 4000:4000
