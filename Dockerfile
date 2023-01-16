@@ -7,12 +7,9 @@ ARG root="/usr/apps/backend"
 RUN mkdir -p ${root}
 WORKDIR ${root}
 
-RUN ls
-RUN pwd
-
-COPY ./apps/medix-backend/dist/. ${root}/
-COPY ./apps/medix-backend/package.json ${root}
+COPY package.json ${root}
 RUN npm install --production
+COPY . ${root}/
 ##
 
 CMD [ "node", "app.js" ]
