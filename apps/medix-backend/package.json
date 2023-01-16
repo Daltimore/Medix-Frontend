@@ -12,7 +12,6 @@
   },
   "private": "true",
   "dependencies": {
-    "@medix/types": "workspace:^1.0.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -26,6 +25,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
+    "@medix/types": "workspace:^1.0.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
