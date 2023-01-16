@@ -5,7 +5,7 @@ RUN mkdir -p ${root}
 WORKDIR ${root}
 
 COPY apps/medix-backend/package.json .
-RUN npm install --only=prod
+RUN npm install --production
 COPY apps/medix-backend/dist/. ./
 
 CMD [ "node", "app.js" ]
