@@ -4,8 +4,8 @@ ARG root="/usr/apps/backend"
 RUN mkdir -p ${root}
 WORKDIR ${root}
 
-COPY apps/medix-backend/package*.json .
-RUN npm ci --only=production
+COPY apps/medix-backend/package.json apps/medix-backend/package-lock.json ./
+RUN npm ci --omit=dev
 COPY apps/medix-backend/dist/. ./
 
 CMD [ "node", "app.js" ]
