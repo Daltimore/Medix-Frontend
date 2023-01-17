@@ -8,5 +8,8 @@
     "build:dev": "pnpm build --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
 }

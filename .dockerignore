@@ -1,0 +1,8 @@
+.git
+node_modules
+docker-compose*.yaml
+Dockerfile
+.eslintrc
+.gitignore
+.env
+Procfile
