@@ -1,6 +1,6 @@
 FROM node:18-alpine AS base
 
-RUN npm i -g pnpm typescript
+RUN npm i -g pnpm
 ##
 
 FROM base AS dependencies
@@ -10,6 +10,7 @@ RUN mkdir -p ${root}
 WORKDIR ${root}
 
 COPY . ${root}/
+RUN npm i -g typescript
 RUN pnpm --filter @medix/types i
 RUN pnpm --filter @medix/types build
 RUN pnpm install
