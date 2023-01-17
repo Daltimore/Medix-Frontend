@@ -20,8 +20,8 @@ ARG root="/usr/apps/backend"
 WORKDIR ${root}/apps/medix-backend
 # COPY . .
 COPY --from=dependencies "${root}" ./
-RUN pnpm build
-RUN pnpm prune --prod
+RUN pnpm --filter @medix/backend build
+RUN pnpm --filter @medix/backend prune --prod
 ##
 
 FROM base AS deploy
