@@ -82,7 +82,7 @@ export const authMiddleware = async (
     return res.status(403).send("A token is required for authentication");
 
   try {
-    const decoded = jwt.verify(token, config.JWT_SECRET!) as AccessTokenPayload;
+    const decoded = jwt.decode(token, {}) as AccessTokenPayload;
     console.log(decoded);
     RequestContext.get(req)!.user = decoded.user;
     RequestContext.get(req)!.scope = decoded.scope;
