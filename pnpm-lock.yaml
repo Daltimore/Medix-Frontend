@@ -55,6 +55,12 @@ importers:
       '@types/validator': 13.7.10
       typescript: 4.9.4
 
+  libs/types:
+    specifiers:
+      typescript: ^4.9.4
+    devDependencies:
+      typescript: 4.9.4
+
 packages:
 
   /@aws-crypto/ie11-detection/2.0.2:
