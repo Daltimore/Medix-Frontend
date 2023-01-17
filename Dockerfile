@@ -33,5 +33,5 @@ WORKDIR ${root}
 COPY --from=build "${root}/apps/medix-backend" ./
 # COPY --from=build "${root}/apps/medix-backend/node_modules" ./node_modules
 
-CMD [ "node", "dist/app.js" ]
+CMD [ "node", "apps/medix-backend/dist/app.js" ]
 ##
