@@ -12,7 +12,6 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
-import { config } from "../config";
 import { UserDef } from "@medix/types";
 import { AccessTokenPayload, Scope, scopes } from "../domains/auth/types";
 

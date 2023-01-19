@@ -1,27 +1,27 @@
-import { Router } from "express";
 import {
   createAccessToken,
   createHospitalMemberOfStaff,
-} from "../domains/auth";
+} from "../../domains/auth";
 import {
   RequestContext,
   authMiddleware,
   requireHospitalAuth,
-} from "../middleware";
+} from "../../middleware";
 import { UserDef, UserSignInPayloadDef } from "@medix/types";
-import { UserModel } from "../domains/user/models";
-import { Crypt } from "../utils";
-import { createRefreshToken } from "../domains/auth/index";
-import { connectToDb } from "../database/index";
-import { requireSysAdmin } from "../middleware/index";
+import { UserModel } from "../../domains/user/models";
+import { Crypt } from "../../utils";
+import { createRefreshToken } from "../../domains/auth/index";
+import { connectToDb } from "../../database/index";
+import { requireSysAdmin } from "../../middleware/index";
+import { Router } from "express";
 
-export const medicRouter = Router();
+const router = Router();
 
-medicRouter.post("/users", authMiddleware, requireSysAdmin, (req, res) => {
+router.post("/users", authMiddleware, requireSysAdmin, (req, res) => {
   return res.send(createHospitalMemberOfStaff(req.body));
 });
 
-medicRouter.post("/auth", async (req, res) => {
+router.post("/auth", async (req, res) => {
   try {
     const payload: UserSignInPayloadDef = { ...req.body };
     await connectToDb(payload.tenant);
@@ -68,7 +68,7 @@ medicRouter.post("/auth", async (req, res) => {
   }
 });
 
-medicRouter.get(
+router.get(
   "/profile",
   authMiddleware,
   requireHospitalAuth,
@@ -85,7 +85,7 @@ medicRouter.get(
   }
 );
 
-medicRouter.put(
+router.put(
   "/profile",
   authMiddleware,
   requireHospitalAuth,
@@ -110,3 +110,11 @@ medicRouter.put(
     }
   }
 );
+
+router.get("/icheka", (_, res) => {
+  res.send({
+    hi: "icheka",
+  });
+});
+
+export default router;

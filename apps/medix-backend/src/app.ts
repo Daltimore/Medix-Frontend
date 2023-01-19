@@ -5,6 +5,7 @@ import { config as loadEnvVars } from "dotenv";
 import { adminRoutes } from "./domains/admin";
 import { medicRouter } from "./routes/medic";
 import { noAuthRoutes, patientRouter } from "./routes";
+import { config } from "./config";
 
 process.on("unhandledRejection", (err) => {
   console.log("An unhandled exception occurred!", err);
@@ -14,9 +15,9 @@ loadEnvVars({
   path: joinPaths(__dirname, "../.env"),
 });
 
-const PORT = process.env.PORT || 4000;
+const { PORT } = config;
 
-const app = Express();
+export const app = Express();
 
 addMiddleware(app);
 
@@ -30,6 +31,8 @@ app.use("", (_, res) => {
   res.status(404).send("You are lost :(");
 });
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
-});
+export const start = () => {
+  app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+  });
+};
