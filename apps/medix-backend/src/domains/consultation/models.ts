@@ -42,6 +42,7 @@ const ConsultationSchema = new Schema<ConsultationDef>(
     timestamps: true,
   }
 );
+
 ConsultationSchema.plugin(paginate);
 
 export const ConsultationModel = model<

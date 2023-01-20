@@ -1,9 +1,8 @@
 import { Router } from "express";
-import { authMiddleware } from "../middleware";
-import { requireHospitalAuth } from "../middleware/index";
+import { authMiddleware, requireHospitalAuth } from "~/middleware";
 import { PatientDef } from "@medix/types";
-import { PatientModel } from "../domains/patient";
-import { switchToRequestTenantDb } from "../utils";
+import { PatientModel } from "~/domains/patient";
+import { switchToRequestTenantDb, parsePaginationQs } from "~/utils";
 
 export const patientRouter = Router();
 
@@ -20,7 +19,9 @@ patientRouter.post("/", ...auth, async (req, res) => {
 patientRouter.get("/", ...auth, async (req, res) => {
   try {
     await switchToRequestTenantDb(req);
-    return res.send(await PatientModel.find({}));
+    return res.send(
+      await PatientModel.paginate({}, parsePaginationQs(req.query))
+    );
   } catch (err) {
     return res.status(500).send({
       message: new Error(err as string | undefined).message,
