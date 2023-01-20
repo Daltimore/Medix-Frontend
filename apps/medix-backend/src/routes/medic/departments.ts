@@ -4,8 +4,8 @@ import {
   authMiddleware,
   requireHospitalAuth,
 } from "~/middleware";
-import { connectToDb } from "../../database";
-import { DepartmentModel } from "../../domains/user";
+import { connectToDb } from "~/database";
+import { DepartmentModel } from "~/domains/user";
 
 const router = Router({ mergeParams: true });
 

@@ -1,18 +1,15 @@
-import {
-  createAccessToken,
-  createHospitalMemberOfStaff,
-} from "../../domains/auth";
+import { createAccessToken, createHospitalMemberOfStaff } from "~/domains/auth";
 import {
   RequestContext,
   authMiddleware,
   requireHospitalAuth,
-} from "../../middleware";
+} from "~/middleware";
 import { UserDef, UserSignInPayloadDef } from "@medix/types";
-import { UserModel } from "../../domains/user/models";
-import { Crypt } from "../../utils";
-import { createRefreshToken } from "../../domains/auth/index";
-import { connectToDb } from "../../database/index";
-import { requireSysAdmin } from "../../middleware/index";
+import { UserModel, MedicProfileTypeModel } from "~/domains/user/models";
+import { Crypt } from "~/utils";
+import { createRefreshToken } from "~/domains/auth";
+import { connectToDb } from "~/database";
+import { requireSysAdmin } from "~/middleware";
 import { Router } from "express";
 
 const router = Router();
@@ -111,10 +108,14 @@ router.put(
   }
 );
 
-router.get("/icheka", (_, res) => {
-  res.send({
-    hi: "icheka",
-  });
-});
+router.get(
+  "/profile-types",
+  authMiddleware,
+  requireHospitalAuth,
+  async (req, res) => {
+    await connectToDb(RequestContext.get(req)!.tenant!);
+    res.send(await MedicProfileTypeModel.find());
+  }
+);
 
 export default router;
