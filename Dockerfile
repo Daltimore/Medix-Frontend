@@ -5,7 +5,7 @@ RUN npm i -g pnpm
 
 FROM base AS dependencies
 
-ARG root="."
+ARG root="/backend"
 RUN mkdir -p ${root}
 WORKDIR ${root}/
 
@@ -19,7 +19,7 @@ RUN pnpm install
 
 FROM base AS build
 
-ARG root="/apps/medix-backend"
+ARG root="/backend"
 WORKDIR ${root}
 
 COPY --from=dependencies "${root}" ./
@@ -28,9 +28,9 @@ RUN pnpm --filter @medix/backend build
 
 FROM base AS deploy
 
-ARG root="/apps/medix-backend"
+ARG root="/backend"
 WORKDIR ${root}
 COPY --from=build ${root} ./
 
 CMD [ "node", "${root}/dist/index.js" ]
-##
+#
