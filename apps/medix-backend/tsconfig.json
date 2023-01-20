@@ -1,7 +1,17 @@
 {
   "compilerOptions": {
       "outDir": "./dist",
-      "rootDir": "./src"
+      "rootDir": "./src",
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "baseUrl": "./",
+      "moduleResolution": "Node",
+      "paths": {
+        "~/*": ["./src/*"]
+      }
   },
-  "extends": "../../tsconfig.json"
+  "extends": "../../tsconfig.json",
+  "include": [
+    "./src/*/**.ts"
+  ]
 }

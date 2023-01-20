@@ -32,5 +32,5 @@ ARG root="/apps/medix-backend"
 WORKDIR ${root}
 COPY --from=build ${root} ./
 
-CMD [ "node", "${root}/dist/app.js" ]
+CMD [ "node", "${root}/dist/index.js" ]
 ##
