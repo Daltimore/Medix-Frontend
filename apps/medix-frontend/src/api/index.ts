@@ -1,90 +1,80 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import { ref } from 'vue'
 
-interface AxiosRequestConfigAuth extends AxiosRequestConfig {
+interface AxiosRequestConfigWithAuth extends AxiosRequestConfig {
   requireAuth?: boolean
-  data?: any
 }
 
-class AxiosWrapper {
-  private axios: AxiosInstance
-  private baseURL: string = 'https://api.yourdomain.com'
+const instance: AxiosInstance = axios.create({
+  baseURL: 'https://your-base-url.com',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
-  constructor() {
-    this.axios = axios.create({ baseURL: this.baseURL })
+const accessToken = ref(localStorage.getItem('access_token'))
+const refreshToken = ref(localStorage.getItem('refresh_token'))
 
-    this.axios.interceptors.request.use((config: AxiosRequestConfigAuth) => {
-      if (config.requireAuth) {
-        const token = localStorage.getItem('access_token')
-        if (!token) {
-          throw new Error('Unauthorized access to secured route')
-        }
-        config.headers = {
-          ...config.headers,
-          Authorization: `Bearer ${token}`,
-        }
-      }
-      return config
+instance.interceptors.request.use((config: AxiosRequestConfigWithAuth) => {
+  if (!config.headers) {
+    config.headers = {}
+  }
+  if (config.requireAuth) {
+    config.headers = Object.assign(config.headers, {
+      Authorization: `Bearer ${accessToken.value}`,
     })
-
-    this.axios.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (error.response.status === 401) {
-          await this.refreshToken()
-          const config = error.config
-          config.headers['Authorization'] =
-            'Bearer ' + localStorage.getItem('access_token')
-          return this.axios.request(config)
-        }
-        return Promise.reject(error)
-      }
-    )
   }
+  return config
+})
 
-  private async refreshToken() {
-    // code to refresh the token
-  }
+instance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config
 
-  public async get<T = any>(httpReq: AxiosRequestConfigAuth): Promise<T> {
-    const config = {
-      url: httpReq.url,
-      method: 'get',
-      requireAuth: httpReq.requireAuth,
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+
+      const { data } = await instance.post('/refresh-token', {
+        refresh_token: refreshToken.value,
+      })
+
+      accessToken.value = data.access_token
+      localStorage.setItem('access_token', data.access_token)
+      originalRequest.headers.Authorization = `Bearer ${data.access_token}`
+
+      return instance(originalRequest)
     }
-    return this.request(config)
-  }
 
-  public async post<T = any>(httpReq: AxiosRequestConfigAuth): Promise<T> {
-    const config = {
-      url: httpReq.url,
-      method: 'post',
-      data: httpReq.data,
-      requireAuth: httpReq.requireAuth,
+    return Promise.reject(error)
+  }
+)
+
+export default {
+  async get(url: string, options?: AxiosRequestConfigWithAuth) {
+    return instance.get(url, options)
+  },
+  async post(url: string, data?: any, options?: AxiosRequestConfigWithAuth) {
+    return instance.post(url, data, options)
+  },
+  async put(url: string, data?: any, options?: AxiosRequestConfigWithAuth) {
+    return instance.put(url, data, options)
+  },
+  async delete(url: string, options?: AxiosRequestConfigWithAuth) {
+    return instance.delete(url, options)
+  },
+  async request(config: AxiosRequestConfigWithAuth) {
+    if (config.url && !config.baseURL) {
+      config.baseURL = 'https://your-base-url.com'
     }
-    return this.request(config)
-  }
-
-  public async put<T = any>(httpReq: AxiosRequestConfigAuth): Promise<T> {
-    const config = {
-      url: httpReq.url,
-      method: 'put',
-      data: httpReq.data,
-      requireAuth: httpReq.requireAuth,
-    }
-    return this.request(config)
-  }
-
-  public async delete<T = any>(httpReq: AxiosRequestConfigAuth): Promise<T> {
-    const config = {
-      url: httpReq.url,
-      method: 'delete',
-      requireAuth: httpReq.requireAuth,
-    }
-    return this.request(config)
-  }
-
-  public async request<T = any>(config: AxiosRequestConfigAuth): Promise<T> {
-    config.url = this.baseURL + config.url
-    return this.axios.request<T>(config)
-  }
+    return instance(config)
+  },
 }
+
+// axiosWrapper.post(
+//   '/data',
+//   { data: 'some data' },
+//   {
+//     requireAuth: true,
+//   }
+// )

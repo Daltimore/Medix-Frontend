@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        /* --color-text-base: #fff; */
+        --color-text-base: #4F4F4F;
+        --color-text-active: #9B51E0;
+        --color-fill: #fff;
+        --color-fill-muted: #F8F0FB;
+        --color-button-active: #9B51E0;
+
+    }
+}
+
+
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-weight: 300;
+    src: url('../fonts/SegoeUI-Light.woff2') format('woff2'),
+        url('../fonts/SegoeUI-Light.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-weight: 400;
+    src: url('../fonts/SegoeUI.woff2') format('woff2'),
+        url('../fonts/SegoeUI.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-weight: 500;
+    src: url('../fonts/SegoeUI-Semibold.woff2') format('woff2'),
+        url('../fonts/SegoeUI-Semibold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Segoe UI';
+    font-weight: 600;
+    src: url('../fonts/SegoeUI-Bold.woff2') format('woff2'),
+        url('../fonts/SegoeUI-Bold.woff') format('woff');
+}
