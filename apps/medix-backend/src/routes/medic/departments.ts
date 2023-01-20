@@ -9,7 +9,7 @@ import { DepartmentModel } from "~/domains/user";
 
 const router = Router({ mergeParams: true });
 
-router.all("/", authMiddleware, requireHospitalAuth, async (req, res) => {
+router.get("/", authMiddleware, requireHospitalAuth, async (req, res) => {
   const ctx = RequestContext.get(req);
   await connectToDb(ctx?.tenant!);
   try {
