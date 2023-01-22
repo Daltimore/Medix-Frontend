@@ -32,5 +32,5 @@ ARG root="/backend"
 WORKDIR ${root}
 COPY --from=build ${root} ./
 
-CMD [ "node", "${root}/dist/index.js" ]
+CMD [ "node", "/backend/dist/index.js" ]
 #
