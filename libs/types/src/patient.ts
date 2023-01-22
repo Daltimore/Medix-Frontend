@@ -47,7 +47,6 @@ export interface PatientDef extends BaseDocumentDef {
   dateOfBirth?: Date;
   primaryPhoneNumber?: string;
   email?: string;
-  vitals?: PatientVitalsDef;
   genotype?: genotype;
   bloodGroup?: bloodGroup;
   isReferredPatient: boolean;

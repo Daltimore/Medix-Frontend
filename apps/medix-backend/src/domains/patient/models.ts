@@ -5,8 +5,6 @@ import {
   genotypes,
   maritalStatuses,
   NextOfKinDef,
-  PatientVitalsDef,
-  temperatureUnits,
   ValueWithTimestampDef,
   MedicationDef,
 } from "@medix/types";
@@ -116,30 +114,6 @@ const PatientSchema = new Schema<PatientDef>(
         type: String,
         required: [true, "relationship with next-of-kin is required"],
         maxlength: 20,
-      },
-    }),
-    vitals: new Schema<PatientVitalsDef>({
-      pulse: {
-        type: Number,
-        max: 220,
-      },
-      respiration: {
-        type: Number,
-        max: 40,
-      },
-      temperature: {
-        type: Number,
-        max: 232,
-      },
-      temperatureUnit: {
-        type: String,
-        enum: {
-          values: temperatureUnits,
-          message: `\`temperatureUnit\` must be one of ${temperatureUnits.join(
-            ", "
-          )}`,
-        },
-        default: "C",
       },
     }),
     allergies: {

@@ -1,4 +1,5 @@
 import { BaseDocumentDef } from "./database";
+import { PatientVitalsDef } from "./patient";
 
 export const consultationTypes = [
   "doctor",
@@ -13,7 +14,11 @@ export const consultationPriorityTypes = ["low", "medium", "high"] as const;
 
 export type ConsultationPriorityType = typeof consultationPriorityTypes[number];
 
-export const consultationCheckInTypes = ["private", "HMO", "NHIS"] as const;
+export const consultationCheckInTypes = [
+  "private-single",
+  "walk-in",
+  "accident & emergency",
+] as const;
 
 export type ConsultationCheckInTypes = typeof consultationCheckInTypes[number];
 
@@ -22,4 +27,8 @@ export interface ConsultationDef extends BaseDocumentDef {
   priority: ConsultationPriorityType;
   checkInType: ConsultationCheckInTypes;
   patientId: string;
+  hasStartedVitalSigns: boolean;
+  hasCompletedVitalSigns: boolean;
+  vitalSigns: Partial<PatientVitalsDef>;
+  checkedInBy: string;
 }
