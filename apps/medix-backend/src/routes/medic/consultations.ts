@@ -8,6 +8,7 @@ import { connectToDb } from "~/database";
 import { ConsultationModel } from "~/domains/consultation";
 import { parsePaginationQs } from "~/utils";
 import { switchToRequestTenantDb } from "../../utils/database";
+import { publishMessageToUsers } from "~/websocket";
 
 const router = Router({ mergeParams: true });
 const auth = [authMiddleware, requireHospitalAuth];
@@ -17,9 +18,12 @@ router.get("/", ...auth, async (req, res) => {
   const ctx = RequestContext.get(req);
   await connectToDb(ctx?.tenant!);
   try {
-    return res.send(
-      await ConsultationModel.paginate({}, parsePaginationQs(req.query))
+    const docs = await ConsultationModel.paginate(
+      {},
+      parsePaginationQs(req.query)
     );
+    publishMessageToUsers([ctx!.user!._id], docs);
+    return res.send(docs);
   } catch (err) {
     return res.status(500).send({
       message: new Error(String(err)).message,

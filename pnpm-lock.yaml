@@ -20,6 +20,7 @@ importers:
       '@types/node': ^18.11.18
       '@types/randomstring': ^1.1.8
       '@types/validator': ^13.7.10
+      '@types/ws': ^8.5.4
       bcrypt: ^5.1.0
       cookie-parser: ^1.4.6
       cors: ^2.8.5
@@ -37,6 +38,7 @@ importers:
       tsup: ^6.5.0
       typescript: ^4.9.4
       validator: ^13.7.0
+      ws: ^8.12.0
     dependencies:
       '@medix/types': link:../../libs/types
       bcrypt: 5.1.0
@@ -53,6 +55,7 @@ importers:
       morgan: 1.10.0
       randomstring: 1.2.3
       validator: 13.7.0
+      ws: 8.12.0
     devDependencies:
       '@types/bcrypt': 5.0.0
       '@types/cookie-parser': 1.4.3
@@ -63,6 +66,7 @@ importers:
       '@types/node': 18.11.18
       '@types/randomstring': 1.1.8
       '@types/validator': 13.7.10
+      '@types/ws': 8.5.4
       module-alias: 2.2.2
       tsup: 6.5.0_typescript@4.9.4
       typescript: 4.9.4
@@ -1044,6 +1048,12 @@ packages:
       '@types/node': 18.11.18
       '@types/webidl-conversions': 7.0.0
     dev: false
+
+  /@types/ws/8.5.4:
+    resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
+    dependencies:
+      '@types/node': 18.11.18
+    dev: true
 
   /abbrev/1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -2752,6 +2762,19 @@ packages:
 
   /wrappy/1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  /ws/8.12.0:
+    resolution: {integrity: sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dev: false
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
