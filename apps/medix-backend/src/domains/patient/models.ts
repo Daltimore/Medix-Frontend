@@ -10,8 +10,9 @@ import {
   ValueWithTimestampDef,
   MedicationDef,
 } from "@medix/types";
-import { Schema, model } from "mongoose";
-import { generateEmailSchema, generateNameSchema } from "../../utils";
+import { PaginateModel, Schema, model } from "mongoose";
+import { generateEmailSchema, generateNameSchema } from "~/utils";
+import paginate from "mongoose-paginate-v2";
 
 const ValueWithTimestampSchema = new Schema<ValueWithTimestampDef>({
   timestamp: {
@@ -158,4 +159,9 @@ const PatientSchema = new Schema<PatientDef>(
   }
 );
 
-export const PatientModel = model("Patients", PatientSchema);
+PatientSchema.plugin(paginate);
+
+export const PatientModel = model<PatientDef, PaginateModel<PatientDef>>(
+  "Patients",
+  PatientSchema
+);

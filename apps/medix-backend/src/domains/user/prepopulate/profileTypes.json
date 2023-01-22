@@ -1,0 +1,20 @@
+[
+    {
+        "name": "General Practitioner",
+        "consultationFee": 2000
+    },
+    {
+        "name": "Gynaecologist",
+        "consultationFee": 3000
+    },
+    {
+        "name": "Nurse"
+    },
+    {
+        "name": "Paediatric Oncologist",
+        "consultationFee": 10000
+    },
+    {
+        "name": "Radiographer"
+    }
+]

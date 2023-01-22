@@ -5,13 +5,18 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "node dist/app.js",
-    "dev": "concurrently 'tsc --watch' 'nodemon -q dist/app.js'",
+    "build": "pnpm --filter types run build && pnpm exec tsc --noEmit && NODE_ENV=production pnpm exec tsup",
+    "start": "node dist/index.js",
+    "devs": "concurrently 'pnpm build' 'nodemon -q dist/index.js'",
+    "dev": "pnpm build && concurrently \"nodemon -q dist/index.js\" \"run-when-changed --watch 'src/**/*.ts' --exec 'pnpm build'\"",
     "compose:up": "docker-compose up --build"
   },
   "private": "true",
+  "_moduleAliases": {
+    "~/": "./src"
+  },
   "dependencies": {
+    "@medix/types": "workspace:^1.0.0",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -21,11 +26,11 @@
     "medix": "workspace:^1.0.0",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.3",
+    "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.10.0",
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@medix/types": "workspace:^1.0.0",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",
@@ -34,6 +39,8 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.11.18",
     "@types/validator": "^13.7.10",
+    "module-alias": "^2.2.2",
+    "tsup": "^6.5.0",
     "typescript": "^4.9.4"
   }
 }

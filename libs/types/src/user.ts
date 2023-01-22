@@ -1,4 +1,5 @@
 import { BaseDocumentDef } from "./database";
+
 export const profileTypes = ["Administrator"] as const;
 
 export interface UserDef extends BaseDocumentDef {
