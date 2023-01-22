@@ -77,6 +77,7 @@ const ConsultationSchema = new Schema<ConsultationDef>(
       required: true,
       default: false,
     },
+    assignedTo: String,
   },
   {
     timestamps: true,

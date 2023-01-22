@@ -7,6 +7,7 @@ import {
 import { connectToDb } from "~/database";
 import { ConsultationModel } from "~/domains/consultation";
 import { parsePaginationQs } from "~/utils";
+import { switchToRequestTenantDb } from "../../utils/database";
 
 const router = Router({ mergeParams: true });
 const auth = [authMiddleware, requireHospitalAuth];
@@ -27,9 +28,13 @@ router.get("/", ...auth, async (req, res) => {
 });
 
 router.post("/", ...auth, async (req, res) => {
-  await connectToDb(RequestContext.get(req)!.tenant!);
+  const ctx = RequestContext.get(req)!;
+  await switchToRequestTenantDb(req);
   try {
-    const consultation = new ConsultationModel({ ...req.body });
+    const consultation = new ConsultationModel({
+      ...req.body,
+      checkedInBy: ctx.user?._id,
+    });
     await consultation.save();
     return res.send(consultation);
   } catch (err) {

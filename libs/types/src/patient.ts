@@ -52,7 +52,7 @@ export interface PatientDef extends BaseDocumentDef {
   isReferredPatient: boolean;
   referrerId?: string;
   nextOfKin?: NextOfKinDef;
-  cardNumber?: string;
+  cardNumber: string;
   allergies: Array<string>;
   immunizations: Array<ValueWithTimestampDef>;
   medications: Array<MedicationDef>;

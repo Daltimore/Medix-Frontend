@@ -9,7 +9,11 @@ import {
   MedicationDef,
 } from "@medix/types";
 import { PaginateModel, Schema, model } from "mongoose";
-import { generateEmailSchema, generateNameSchema } from "~/utils";
+import {
+  generateEmailSchema,
+  generateNameSchema,
+  generatePatientNumber,
+} from "~/utils";
 import paginate from "mongoose-paginate-v2";
 
 const ValueWithTimestampSchema = new Schema<ValueWithTimestampDef>({
@@ -134,6 +138,10 @@ const PatientSchema = new Schema<PatientDef>(
 );
 
 PatientSchema.plugin(paginate);
+
+PatientSchema.pre("save", async function () {
+  if (!this.cardNumber) this.cardNumber = await generatePatientNumber();
+});
 
 export const PatientModel = model<PatientDef, PaginateModel<PatientDef>>(
   "Patients",

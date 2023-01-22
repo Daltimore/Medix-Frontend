@@ -31,4 +31,5 @@ export interface ConsultationDef extends BaseDocumentDef {
   hasCompletedVitalSigns: boolean;
   vitalSigns: Partial<PatientVitalsDef>;
   checkedInBy: string;
+  assignedTo?: string;
 }
