@@ -12,12 +12,18 @@ const canoniseTenantName = (tenant: string) => {
 
 let retries = 0;
 
+const cache: Array<string> = [];
+
 export const connectToDb = async (tenant: string): Promise<void> => {
   try {
+    if (cache.includes(tenant)) return;
+
     const dbName = canoniseTenantName(`medix-${tenant}`);
     await mongooseConnect(uri.replace("?", `${dbName}?`), {
       serverSelectionTimeoutMS: 1000,
     });
+
+    cache.push(tenant);
   } catch (err) {
     if (retries > 10) throw err;
     console.log("Failed to connect to Atlas. Retrying...");

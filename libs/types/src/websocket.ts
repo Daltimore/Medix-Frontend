@@ -1,11 +1,24 @@
-import { ConsultationDef } from "./consultation";
+import { PaginateResult } from "./database";
+import { GetConsultationsResponse } from "./responses";
 
-export interface WebSocketRequestDef {
+export type HandshakePayload = {
   authorization: string;
-}
+  action: "handshake";
+  tenant: string;
+};
 
-export const webSocketPaths = [
-  { path: "/consultations/awaiting", body: Array<ConsultationDef> },
-] as const;
+export type WebSocketRequestDef =
+  | HandshakePayload
+  | {
+      path: "/consultations/awaiting" | "/consultations/assigned-to-me";
+    };
 
-export type WebSocketResponseDef = typeof webSocketPaths[number];
+export type WebSocketResponseDef =
+  | {
+      path: "/consultations/awaiting";
+      body: PaginateResult<GetConsultationsResponse>;
+    }
+  | {
+      path: "/consultations/assigned-to-me";
+      body: PaginateResult<GetConsultationsResponse>;
+    };
