@@ -1,3 +1,5 @@
-import { start } from "./app";
+import { start as startRestServer } from "./app";
+import { startWsServer } from "./websocket/server";
 
-start();
+const server = startRestServer();
+startWsServer(server);

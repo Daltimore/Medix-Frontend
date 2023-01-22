@@ -22,7 +22,7 @@ FROM base AS build
 ARG root="/backend"
 WORKDIR ${root}
 
-COPY --from=dependencies "${root}" ./
+COPY --from=dependencies ${root} ${root}
 RUN pnpm --filter @medix/backend build
 ##
 
@@ -30,7 +30,7 @@ FROM base AS deploy
 
 ARG root="/backend"
 WORKDIR ${root}
-COPY --from=build ${root} ./
+COPY --from=build ${root} ${root}
 
-CMD [ "node", "${root}/dist/index.js" ]
+CMD [ "node", "apps/medix-backend/dist/index.js" ]
 #

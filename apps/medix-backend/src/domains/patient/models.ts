@@ -5,13 +5,15 @@ import {
   genotypes,
   maritalStatuses,
   NextOfKinDef,
-  PatientVitalsDef,
-  temperatureUnits,
   ValueWithTimestampDef,
   MedicationDef,
 } from "@medix/types";
 import { PaginateModel, Schema, model } from "mongoose";
-import { generateEmailSchema, generateNameSchema } from "~/utils";
+import {
+  generateEmailSchema,
+  generateNameSchema,
+  generatePatientNumber,
+} from "~/utils";
 import paginate from "mongoose-paginate-v2";
 
 const ValueWithTimestampSchema = new Schema<ValueWithTimestampDef>({
@@ -118,30 +120,6 @@ const PatientSchema = new Schema<PatientDef>(
         maxlength: 20,
       },
     }),
-    vitals: new Schema<PatientVitalsDef>({
-      pulse: {
-        type: Number,
-        max: 220,
-      },
-      respiration: {
-        type: Number,
-        max: 40,
-      },
-      temperature: {
-        type: Number,
-        max: 232,
-      },
-      temperatureUnit: {
-        type: String,
-        enum: {
-          values: temperatureUnits,
-          message: `\`temperatureUnit\` must be one of ${temperatureUnits.join(
-            ", "
-          )}`,
-        },
-        default: "C",
-      },
-    }),
     allergies: {
       type: [String],
       default: [],
@@ -160,6 +138,10 @@ const PatientSchema = new Schema<PatientDef>(
 );
 
 PatientSchema.plugin(paginate);
+
+PatientSchema.pre("save", async function () {
+  if (!this.cardNumber) this.cardNumber = await generatePatientNumber();
+});
 
 export const PatientModel = model<PatientDef, PaginateModel<PatientDef>>(
   "Patients",

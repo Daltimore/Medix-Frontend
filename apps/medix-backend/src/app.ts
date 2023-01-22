@@ -32,7 +32,7 @@ app.use("", (_, res) => {
 });
 
 export const start = () => {
-  app.listen(PORT, () => {
+  return app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });
 };

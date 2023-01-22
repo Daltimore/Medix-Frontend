@@ -22,3 +22,33 @@ export const switchToRequestTenantDb = (req: Request) => {
   if (!tenant) throw new Error("`tenant` not in auth claims");
   return connectToDb(tenant);
 };
+
+export const generateSearchParams = async <T>(fields: Partial<T>) => {
+  const params: Record<string, any> = {};
+
+  for (const [k, v] of Object.entries(fields)) {
+    switch (typeof v) {
+      case "boolean":
+      case "number":
+        params[k] = v;
+        break;
+
+      case "string":
+        params[k] = {
+          $regex: (await import("escape-string-regexp")).default(
+            v.toLowerCase()
+          ),
+        };
+        break;
+
+      case "object":
+        // TODO: expand this to support 'any'/'all' operators
+        params[k] = v;
+
+      default:
+        break;
+    }
+  }
+
+  return params;
+};
