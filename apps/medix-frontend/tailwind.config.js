@@ -11,6 +11,10 @@ module.exports = {
       screens: {
         '3xl': '1900px',
       },
+      colors: {
+        'gray-one': '#333333',
+        'gray-two': '#4F4F4F',
+      },
     },
   },
   plugins: [import('@tailwindcss/forms')],

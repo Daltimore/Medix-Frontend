@@ -1,3 +1,4 @@
 <template>
-  <main>Login</main>
+  <!-- component/layouts -->
+  <LoginComp />
 </template>

@@ -36,7 +36,17 @@ const router = createRouter({
               path: 'patients',
               name: 'DashboardPatients',
               component: () =>
-                import('../views/dashboard/records/Patients.vue'),
+                import(
+                  /* webpackChunkName: "dashboard-patients" */ '../views/dashboard/records/Patients.vue'
+                ),
+            },
+            {
+              path: 'patients/new-patients',
+              name: 'DashboardNewPatients',
+              component: () =>
+                import(
+                  /* webpackChunkName: "dashboard-patients" */ '../views/dashboard/records/NewPatients.vue'
+                ),
             },
             {
               path: 'out-patients',
